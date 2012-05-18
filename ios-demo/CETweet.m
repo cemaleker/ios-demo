@@ -27,12 +27,12 @@
     
     if(self) {
         _user = [[NSString stringWithFormat:@"@%@", [dictionary objectForKey: @"from_user"]] retain];
-        _user_id = [[dictionary objectForKey: @"from_user_id_str"] retain];
-        _user_name = [[dictionary objectForKey: @"from_user_name"] retain];
-        _tweet_source = [[dictionary objectForKey: @"source"] retain];
-        _tweet_id = [[dictionary objectForKey: @"id_str"] retain];
-        _tweet_text = [[dictionary objectForKey: @"text"] retain];
-        _profile_image_url = [[dictionary objectForKey: @"profile_image_url"] retain];
+        _user_id = [[dictionary objectForKey: @"from_user_id_str"] copy];
+        _user_name = [[dictionary objectForKey: @"from_user_name"] copy];
+        _tweet_source = [[dictionary objectForKey: @"source"] copy];
+        _tweet_id = [[dictionary objectForKey: @"id_str"] copy];
+        _tweet_text = [[dictionary objectForKey: @"text"] copy];
+        _profile_image_url = [[dictionary objectForKey: @"profile_image_url"] copy];
         
         NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setTimeStyle:NSDateFormatterFullStyle];

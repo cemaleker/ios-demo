@@ -31,7 +31,25 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)createModel {
     [self setDataSource: [[[CETwitterDataSource alloc] init] autorelease]];
+    if(![self.superController isKindOfClass: [CETwitterController class]]) {
+        TTTableViewController* searchController = [[[CETwitterController alloc] init] autorelease];
+        searchController.dataSource = [[[CETwitterDataSource alloc] init] autorelease];
+        self.searchViewController = searchController;
+        self.tableView.tableHeaderView = _searchController.searchBar;
+        _searchController.searchBar.text = @"Istanbul";
+    }
 }
+
+//- (void) modelDidFinishLoad:(id<TTModel>)model {
+//    if(![self.superController isKindOfClass: [CETwitterController class]]) {
+//        TTTableViewController* searchController = [[[CETwitterController alloc] init] autorelease];
+//        searchController.dataSource = [[[CETwitterDataSource alloc] init] autorelease];
+//        self.searchViewController = searchController;
+//        self.tableView.tableHeaderView = _searchController.searchBar;
+//        _searchController.searchBar.text = @"Istanbul";
+//    }
+//
+//}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

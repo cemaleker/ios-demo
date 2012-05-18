@@ -36,12 +36,13 @@
     NSMutableArray* items = [[NSMutableArray alloc] init];
     
     for (CETweet* tweet in _twitterModel.tweets) {
-        [items addObject: [TTTableMessageItem itemWithTitle:tweet.user 
-                                                    caption:tweet.user_name 
-                                                       text:tweet.tweet_text 
-                                                  timestamp:tweet.created 
-                                                   imageURL:tweet.profile_image_url 
-                                                        URL:@""]];
+        TTTableMessageItem *item = [[TTTableMessageItem alloc] init];
+        item.title = tweet.user;
+        item.caption = tweet.user_name;
+        item.text = tweet.tweet_text;
+        item.imageURL = tweet.profile_image_url;
+        [items addObject: item];
+        TT_RELEASE_SAFELY(item);
     }
     
     self.items = items;
@@ -52,11 +53,29 @@
     return _twitterModel;
 }
 
+- (void) setModel:(id<TTModel>)model {
+    if(model != _twitterModel) {
+        TT_RELEASE_SAFELY(_twitterModel);
+        _twitterModel = [model retain];
+    }
+}
+
+- (void)search:(NSString*)text {
+    _twitterModel.query = text;
+    [_twitterModel search];
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//-(Class)tableView:(UITableView *)tableView cellClassForObject:(id)object {
-//    return [super tableView:tableView cellClassForObject:object];
-//
-//}
+-(Class)tableView:(UITableView *)tableView cellClassForObject:(id)object {
+    if([object isKindOfClass: [CETableTweetItem class]]) {
+        return [CETableTweetItemCell class];
+    }
+    
+    return [super tableView:tableView cellClassForObject:object];
+
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString*)titleForLoading:(BOOL)reloading {
     if (_twitterModel.updatingLocation) {

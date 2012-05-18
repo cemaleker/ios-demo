@@ -17,8 +17,11 @@
     NSError *_locationUpdateError;
     CLLocationManager *_locationManager;
     CLLocation  *_currentLocation;
+    NSString    *_query;
 }
 
+- (void) search;
+@property (nonatomic, copy) NSString *query;
 @property (nonatomic, readonly) NSArray* tweets;
 @property (nonatomic, readonly) BOOL updatingLocation;
 

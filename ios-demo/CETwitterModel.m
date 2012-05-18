@@ -12,28 +12,32 @@
 
 @implementation CETwitterModel
 
-@synthesize tweets = _tweets, updatingLocation = _updatingLocation;
+@synthesize query = _query, tweets = _tweets, updatingLocation = _updatingLocation;
 
 #pragma mark Request
 
 - (NSString *) requestUrl {
-    return [NSString stringWithFormat:@"http://search.twitter.com/search.json?q=a&geocode=%f,%f,%dkm", 
+    return [NSString stringWithFormat:@"http://search.twitter.com/search.json?q=%@&geocode=%f,%f,%dkm", 
+            self.query,
             _currentLocation.coordinate.latitude, 
             _currentLocation.coordinate.longitude, 
             1]; 
 }
 
 - (void) sendRequest  {
-    if(self.isLoading) {
-        return;
-    }
-        
     TTDINFO(@"Request URL: %@", [self requestUrl]);
     TTURLRequest *request = [TTURLRequest requestWithURL: [self requestUrl] delegate:self];
     [request setResponse: [[[TTURLJSONResponse alloc] init] autorelease]];
     [request setCachePolicy: TTURLRequestCachePolicyNoCache];
     [request send];
     TTDINFO(@"Request sent");
+}
+
+- (void) search {
+    if(self.updatingLocation) {
+        return;
+    }
+    [self sendRequest];
 }
 
 #pragma mark Location 
@@ -126,6 +130,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)requestDidFinishLoad:(TTURLRequest*)request {
+    TTDINFO(@"Request did finish load");
     TTURLJSONResponse* response = request.response;
     TTDASSERT([response.rootObject isKindOfClass:[NSDictionary class]]);
     
@@ -154,13 +159,13 @@
     [super requestDidFinishLoad:request];
 }
 
-
 #pragma mark initialize 
 
 - (id) init {
     self = [super init];
     
     if(self) {
+        _query = @"Istanbul";
         _tweets = [[NSMutableArray array] retain];
         _page = 1;
         _currentLocation = nil;
