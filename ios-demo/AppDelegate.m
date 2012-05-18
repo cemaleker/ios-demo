@@ -7,16 +7,35 @@
 //
 
 #import "AppDelegate.h"
+//==============================
+#import "CESplashController.h"
+#import "CETwitterController.h"
 
 @implementation AppDelegate
 
+- (BOOL)application:(UIApplication*)application handleOpenURL:(NSURL*)URL {
+    [[TTNavigator navigator] openURLAction:[TTURLAction actionWithURLPath:URL.absoluteString]];
+    return YES;
+}
 
-@synthesize window=_window;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [self.window makeKeyAndVisible];
+    
+    TTNavigator* navigator = [TTNavigator navigator];
+    navigator.supportsShakeToReload = YES;
+    navigator.persistenceMode = TTNavigatorPersistenceModeNone;
+    
+    TTURLMap* map = navigator.URLMap;
+    [map from:@"*" toViewController:[TTWebController class]];
+    [map from: @"cemaleker://splash"
+          toSharedViewController: [CESplashController class]];
+    
+    [map from: @"cemaleker://twitter" toViewController: [CETwitterController class]];
+    
+    [navigator openURLAction: [TTURLAction actionWithURLPath: @"cemaleker://twitter"]];
+
+    
     return YES;
 }
 
@@ -59,9 +78,8 @@
      */
 }
 
-- (void)dealloc
-{
-    [_window release];
+- (void)dealloc {
+    TT_RELEASE_SAFELY(_window);
     [super dealloc];
 }
 

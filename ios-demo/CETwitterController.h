@@ -1,5 +1,5 @@
 //
-//  ios_demoAppDelegate.h
+//  CeTwitterController.h
 //  ios-demo
 //
 //  Created by Bal on 5/17/12.
@@ -8,8 +8,8 @@
 
 #import "Three20/Three20.h"
 
-@interface AppDelegate : NSObject <UIApplicationDelegate> {
-    UIWindow *_window;
+@interface CETwitterController : TTTableViewController {
 }
+
 
 @end
