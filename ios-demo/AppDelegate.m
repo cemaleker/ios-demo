@@ -7,34 +7,37 @@
 //
 
 #import "AppDelegate.h"
-//==============================
-#import "CESplashController.h"
-#import "CETwitterController.h"
+
+#import "CETweetViewController.h"
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication*)application handleOpenURL:(NSURL*)URL {
-    [[TTNavigator navigator] openURLAction:[TTURLAction actionWithURLPath:URL.absoluteString]];
-    return YES;
-}
-
+#pragma mark - Application Lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    TTNavigator* navigator = [TTNavigator navigator];
-    navigator.supportsShakeToReload = YES;
-    navigator.persistenceMode = TTNavigatorPersistenceModeNone;
+    [[HPLocationManager sharedManager] setIntervalModifier:2.0];
+    [[HPLocationManager sharedManager] setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
+    [[HPLocationManager sharedManager] refreshLocation];
     
-    TTURLMap* map = navigator.URLMap;
-    [map from:@"*" toViewController:[TTWebController class]];
-    [map from: @"cemaleker://splash"
-          toSharedViewController: [CESplashController class]];
+    _window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
+    [_window makeKeyAndVisible];
     
-    [map from: @"cemaleker://twitter" toViewController: [CETwitterController class]];
+    CETweetViewController *tweetController = [[CETweetViewController alloc] initWithStyle: UITableViewStylePlain];
+    _navigationController = [[UINavigationController alloc] initWithRootViewController: tweetController];
+    [tweetController release], tweetController = nil;
     
-    [navigator openURLAction: [TTURLAction actionWithURLPath: @"cemaleker://twitter"]];
-
+    [_window addSubview: _navigationController.view];
+    [_window setAutoresizingMask: (UIViewAutoresizingFlexibleWidth 
+                                   | UIViewAutoresizingFlexibleBottomMargin)];
+    
+    
+//    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys: @"Istanbul", @"q", nil];
+//    
+//    [CEAPIManager searchTweetsWithOptions:options completionBlock:^(id resources, NSError *error){
+//        NSLog(@"Response: %@", [resources description]);
+//    }];
     
     return YES;
 }
@@ -78,8 +81,8 @@
      */
 }
 
-- (void)dealloc {
-    TT_RELEASE_SAFELY(_window);
+#pragma mark - Memory Management
+- (void) dealloc {
     [super dealloc];
 }
 

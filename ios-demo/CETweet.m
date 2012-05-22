@@ -35,16 +35,20 @@
         _profile_image_url = [[dictionary objectForKey: @"profile_image_url"] copy];
         
         NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+        NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+        [dateFormatter setLocale: usLocale];
+        [usLocale release], usLocale = nil;
+        
         [dateFormatter setTimeStyle:NSDateFormatterFullStyle];
-        [dateFormatter setDateFormat:@"eee MMM dd HH:mm:ss ZZZZ yyyy"];
+        [dateFormatter setDateFormat:@"EEE dd MMM YYYY HH:mm:ss ZZZ"];
         _created = [[dateFormatter dateFromString: [dictionary objectForKey:@"created_at"]] retain];
-        TT_RELEASE_SAFELY(dateFormatter);
+        [dateFormatter release], dateFormatter = nil;
         
         NSDictionary* geoObject = [dictionary objectForKey: @"geo"];
         if([geoObject isKindOfClass: [NSDictionary class]]) {
-            TTDASSERT([geoObject isKindOfClass: [NSDictionary class]]);
+            NSAssert([geoObject isKindOfClass: [NSDictionary class]], @"Geo Object must be a dictionary");
             NSArray* coordinates = [geoObject objectForKey:@"coordinates"];
-            TTDASSERT([coordinates isKindOfClass: [NSArray class]]);
+            NSAssert([coordinates isKindOfClass: [NSArray class]], @"Coordinates must be an array");
             _location = [[CLLocation alloc] initWithLatitude: [[coordinates objectAtIndex:0] floatValue] longitude:[[coordinates objectAtIndex: 1] floatValue]];
         }
     }
@@ -52,17 +56,21 @@
     return self;
 }
 
-- (void)dealloc {
-    TT_RELEASE_SAFELY(_created);
-    TT_RELEASE_SAFELY(_user);
-    TT_RELEASE_SAFELY(_user_id);
-    TT_RELEASE_SAFELY(_user_name);
-    TT_RELEASE_SAFELY(_location);
-    TT_RELEASE_SAFELY(_tweet_source);
-    TT_RELEASE_SAFELY(_tweet_id);
-    TT_RELEASE_SAFELY(_tweet_text);
-    TT_RELEASE_SAFELY(_profile_image_url);
+- (NSString *)description {
+    return [NSString stringWithFormat:@"Tweet from: %@, %@", self.user, self.tweet_text]; 
+}
 
+- (void)dealloc {
+    [_created release], _created = nil;
+    [_user release], _user = nil;
+    [_user_id release], _user_id = nil;
+    [_user_name release], _user_name = nil;
+    [_location release], _location = nil;
+    [_tweet_source release], _tweet_source = nil;
+    [_tweet_id release], _tweet_id = nil;
+    [_tweet_text release], _tweet_text = nil;
+    [_profile_image_url release], _profile_image_url = nil;
+    
     [super dealloc];
 }
 

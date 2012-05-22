@@ -6,10 +6,12 @@
 //  Copyright 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "Three20/Three20.h"
+#import <HPUtils/HPUtils.h>
 
 @interface AppDelegate : NSObject <UIApplicationDelegate> {
+    @private
     UIWindow *_window;
+    UINavigationController *_navigationController;
 }
 
 @end
