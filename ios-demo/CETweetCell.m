@@ -65,7 +65,7 @@ static CGFloat kPhotoWidth = 50.0;
     [[self identity] setFrame: CGRectMake(currentPoint.x, currentPoint.y, testSize.width, testSize.height)];
     
     [[self time] setText: [tweet.created fuzzyTime]];
-    [[self time] setText: @"14m"];
+//    [[self time] setText: @"14m"];
     [[self time] setFrame:CGRectMake(self.contentView.frame.size.width - kDefaultMargin - kTimeLabelWidth, currentPoint.y, kTimeLabelWidth, kNameRowHeight)];
     
     

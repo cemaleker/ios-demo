@@ -41,7 +41,7 @@ static NSString * const kAPISearchPath = @"/search.json";
               completionBlock:(void (^)(id, NSError *))completionBlock {
     
     HPRequestManager *requestManager = [HPRequestManager sharedManager];
-    NSString *requestPath = [NSString stringWithFormat:@"%@%@", kAPISearchPath, query];
+    NSString *requestPath = [NSString stringWithFormat:@"%@%@", kAPISearchPath, [query stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     
     [requestManager cancelOperationsWithIdentifier:identifier];
     

@@ -40,7 +40,7 @@
         [usLocale release], usLocale = nil;
         
         [dateFormatter setTimeStyle:NSDateFormatterFullStyle];
-        [dateFormatter setDateFormat:@"EEE dd MMM YYYY HH:mm:ss ZZZ"];
+        [dateFormatter setDateFormat:@"EEE, dd MMM yyyy HH:mm:ss ZZZ"];
         _created = [[dateFormatter dateFromString: [dictionary objectForKey:@"created_at"]] retain];
         [dateFormatter release], dateFormatter = nil;
         
